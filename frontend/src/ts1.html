@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Status Histogram</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+
+    <script>
+        // Sample JSON data
+        const jsonData = [
+            { "ts": "2024-01-21T15:00:19Z", "machine_status": 1, "vibration": 558 },
+            { "ts": "2024-01-21T15:00:20Z", "machine_status": 1, "vibration": 529 },
+            { "ts": "2024-01-21T15:00:21Z", "machine_status": 1, "vibration": 561 }
+            // Add more data here...
+        ];
+
+        // Extract timestamps and machine_status values
+        const timestamps = jsonData.map(entry => new Date(entry.ts));
+        const machineStatus = jsonData.map(entry => entry.machine_status);
+
+        // Prepare data for Chart.js
+        const data = {
+            labels: timestamps,
+            datasets: [{
+                label: 'Machine Status',
+                data: machineStatus,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Red with opacity
+                borderColor: 'rgba(255, 99, 132, 1)', // Red
+                borderWidth: 1
+            }]
+        };
+
+        // Configuration for the histogram
+        const config = {
+            type: 'line', // You can change this to 'bar' if you prefer a bar chart
+            data: data,
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                                millisecond: 'HH:mm:ss',
+                                second: 'HH:mm:ss',
+                                minute: 'HH:mm',
+                                hour: 'HH:mm',
+                                day: 'MMM D',
+                                week: 'll',
+                                month: 'MMM YYYY',
+                                quarter: '[Q]Q - YYYY',
+                                year: 'YYYY'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Timestamp'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Machine Status'
+                        }
+                    }
+                }
+            },
+        };
+
+        // Create the histogram
+        var myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
+</body>
+</html>
